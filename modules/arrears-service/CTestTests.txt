@@ -1,0 +1,102 @@
+#############################################
+##### Testing
+#############################################
+
+set(prefix "${MODULE}")
+
+add_test(
+    NAME ${prefix}_Do_Print_Help_Without_Arguments
+    COMMAND ${APPLICATION}
+)
+
+set_tests_properties (${prefix}_Do_Print_Help_Without_Arguments PROPERTIES
+    PASS_REGULAR_EXPRESSION "This is a arrears service application\\..*"
+    LABELS "${MODULE}")
+
+add_test(
+    NAME ${prefix}_Can_Detect_Wrong_Operation_Format
+    COMMAND ${APPLICATION} hehmda
+)
+set_tests_properties (${prefix}_Can_Detect_Wrong_Operation_Format PROPERTIES
+    PASS_REGULAR_EXPRESSION "Wrong operation format!"
+    LABELS "${MODULE}")
+
+add_test(
+    NAME ${prefix}_can_Detect_Wrong_Number_Format
+    COMMAND ${APPLICATION} express_pay 1 ip 2 3 +
+)
+set_tests_properties (${prefix}_can_Detect_Wrong_Number_Format PROPERTIES
+    PASS_REGULAR_EXPRESSION "Wrong number format!"
+    LABELS "${MODULE}")
+
+add_test(
+    NAME ${prefix}_Can_Detect_Wrong_Number_Express_Pay
+    COMMAND ${APPLICATION} express_pay 30 5 25
+)
+set_tests_properties (${prefix}_Can_Detect_Wrong_Number_Express_Pay PROPERTIES
+    PASS_REGULAR_EXPRESSION "ERROR: Must be 5 arguments for 'express_pay'"
+    LABELS "${MODULE}")
+
+add_test(
+    NAME ${prefix}_Can_Detect_Wrong_Number_Year_Pay_Val
+    COMMAND ${APPLICATION} year_pay_val 54 7 32
+)
+set_tests_properties (${prefix}_Can_Detect_Wrong_Number_Year_Pay_Val PROPERTIES
+    PASS_REGULAR_EXPRESSION "ERROR: Must be 6 arguments for 'year_pay_val'"
+    LABELS "${MODULE}")
+
+add_test(
+    NAME ${prefix}_Can_Detect_Negative_Number_Debt
+    COMMAND ${APPLICATION} express_pay -30 5 25 5
+)
+set_tests_properties (${prefix}_Can_Detect_Negative_Number_Debt PROPERTIES
+    PASS_REGULAR_EXPRESSION "No debt to serv.*"
+    LABELS "${MODULE}")
+
+add_test(
+    NAME ${prefix}_Can_Detect_Negative_Number_Procent
+    COMMAND ${APPLICATION} express_pay 30 -5 25 5
+)
+set_tests_properties (${prefix}_Can_Detect_Negative_Number_Procent PROPERTIES
+    PASS_REGULAR_EXPRESSION "Invalid procent.*"
+    LABELS "${MODULE}")
+
+add_test(
+    NAME ${prefix}_Can_Detect_Negative_Number_Time
+    COMMAND ${APPLICATION} express_pay 30 5 25 -5
+)
+set_tests_properties (${prefix}_Can_Detect_Negative_Number_Time PROPERTIES
+    PASS_REGULAR_EXPRESSION "No time to service.*"
+    LABELS "${MODULE}")
+
+add_test(
+    NAME ${prefix}_Can_Detect_Wrong_Overflow
+    COMMAND ${APPLICATION} year_pay_val 30 75538690765323 25 5 1
+)
+set_tests_properties (${prefix}_Can_Detect_Wrong_Overflow PROPERTIES
+    PASS_REGULAR_EXPRESSION "Number is out of bounds!"
+    LABELS "${MODULE}")
+
+    add_test(
+    NAME ${prefix}_Can_Detect_Zero_Prog
+    COMMAND ${APPLICATION} year_pay_val 30 7 25 5 1 0
+)
+set_tests_properties (${prefix}_Can_Detect_Zero_Prog PROPERTIES
+    PASS_REGULAR_EXPRESSION "No progression to calculate year pay"
+    LABELS "${MODULE}")
+
+        add_test(
+    NAME ${prefix}_Can_Check_Right_Operation_Express_Pay
+    COMMAND ${APPLICATION} express_pay 15000 30 10 2
+)
+set_tests_properties (${prefix}_Can_Check_Right_Operation_Express_Pay PROPERTIES
+    PASS_REGULAR_EXPRESSION "8021.74"
+    LABELS "${MODULE}")
+
+            add_test(
+    NAME ${prefix}_Can_Check_Right_Operation_Year_Pay_Val
+    COMMAND ${APPLICATION} year_pay_val 15000 30 10 2 5.5
+)
+set_tests_properties (${prefix}_Can_Check_Right_Operation_Year_Pay_Val PROPERTIES
+    PASS_REGULAR_EXPRESSION "6519.35"
+    LABELS "${MODULE}")
